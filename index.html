@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>旅遊紀錄</title>
+    <style>
+        body {
+            font-family: "Noto Sans TC", sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            padding-top: 3.55rem;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            background-color: #003366;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 0.5rem 0;
+        }
+
+        header .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 auto;
+            padding: 0 4rem;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.rem;
+            line-height: 3rem;
+            white-space: nowrap;
+           -webkit-text-stroke: 0.2px yellow;
+           text-stroke: 0.2px yellow;
+        }
+
+        .year-nav {
+            overflow-x: hidden;
+            white-space: nowrap;
+        }
+
+        .year-nav ul {
+            display: flex;
+  
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .year-nav li a {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            background-color: #003366;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            transition: background-color 0.3s;
+            line-height: 1.1rem;
+        }
+
+        .year-nav li a:hover {
+            background-color: #003366;
+        }
+
+        .year-nav li a.selected {
+            color: #ffcc00 !important;
+            font-weight: bold !important;
+            font-size: 1.4rem !important;
+            transition: color 0.3s, font-size 0.3s;
+        }
+
+        section.year-block {
+            background: white;
+            margin: 1rem auto;
+            padding: 0.6rem 1rem;
+            max-width: 92%;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            scroll-margin-top: 4.5rem;
+        }
+
+        .itinerary {
+            width: 30%;
+            flex-shrink: 0;
+        }
+
+        .itinerary ul {
+            padding-left: 1.3rem;
+            white-space: nowrap;
+            overflow-x: hidden;
+            list-style-type:none;
+        }
+
+        .itinerary h2 {
+       
+            color: #003366;
+            padding-left: 0.6rem;
+            white-space: nowrap;
+            font-size: 1.7rem;
+            border-bottom: 2px solid #c9c9c9;
+            width: 97%;
+            margin: 10px 10px 0px 10px;
+            text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .itinerary a {
+            padding-left: 1rem;
+            white-space: nowrap;           
+           }
+  
+
+        .album-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: #0055a5;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .album-link:hover {
+            color: #003300;
+            text-decoration: underline;
+        }
+
+        .photo-container {
+            width: 68%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.3rem;
+            margin-top: 0.8rem;
+            margin-left: auto;
+            margin-bottom: 0.8rem;
+        }
+
+        .photo-container .gallery {
+            width: 100%;
+        }
+
+        .photo-container img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 5px 5px 10px rgba(2, 2, 0, 0.5);
+            display: none;
+        }
+
+        .photo-container img.active {
+            display: block;
+        }
+
+        .photo-container button {
+            background-color: rgba(0, 51, 102, 0.8);
+            color: white;
+            border: none;
+            padding:0.6rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            align-self: flex-end;
+            font-size: 1rem;
+            line-height: 1rem;
+            margin: 0rem 0rem -0.7rem 0rem;
+
+        }
+
+        .photo-container button:hover {
+            background-color: #0055a5;
+            color: yellow;
+            font-weight: 700;
+
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            align-self: flex-end;
+            padding-right: 0.5rem;
+            padding-top: 0.4rem;
+
+        }
+
+
+
+
+        footer {
+            text-align: center;
+            padding-bottom: 1rem;
+            font-size: 0.8rem;
+            color: #999;
+
+
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <h1>旅遊紀錄</h1>
+            <nav class="year-nav">
+                <ul>
+                    <li><a href="#y2026" class="year-link">2026</a></li>
+                    <li><a href="#y2025" class="year-link">2025</a></li>
+                    <li><a href="#y2024" class="year-link">2024</a></li>
+                    <li><a href="#y2023" class="year-link">2023</a></li>
+                    <li><a href="#y2020" class="year-link">2020</a></li>
+                    <li><a href="#y2019" class="year-link">2019</a></li>
+                    <li><a href="#y2018" class="year-link">2018</a></li>
+                    <li><a href="#y2017" class="year-link">2017</a></li>
+                    <li><a href="#y2016" class="year-link">2016</a></li>
+                    <li><a href="#y2015" class="year-link">2015</a></li>
+                    <li><a href="#y2014" class="year-link">2014</a></li>
+                    <li><a href="#y2013" class="year-link">2013</a></li>
+                    <li><a href="#y2012" class="year-link">2012</a></li>
+                    <li><a href="#y2011" class="year-link">2011</a></li>
+                    <li><a href="#y2010" class="year-link">2010</a></li>
+                    <li><a href="#my-travel-map" class="year-link">我的足跡</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 其他年份區塊... -->
+    <section class="year-block" id="y2025">
+        <div class="itinerary">
+            <h2>2025 阿根廷、南極半島 </h2>
+            <ul>
+                <li>1/09 : 桃園-香港-伊斯坦堡</li>
+                <li>1/10 : 伊斯坦堡-巴西聖保羅-布宜諾斯艾利斯</li>
+                <li>1/11 : 布宜諾斯艾利斯-烏斯懷亞</li>
+                <li>1/12 : 烏蘇懷亞-登船出發</li>
+                <li>1/13 : 德雷克海峽</li>
+                <li>1/14 : 德雷克海峽</li>
+                <li>1/15 : 南設德群島 (雪島、捕鯨者灣)</li>
+                <li>1/16 : 南極半島 (夏洛特灣、默尼耶角)</li>
+                <li>1/17 : 南極半島  (丹科島、天堂灣、利馬水道)</li>
+                <li>1/18 : 德雷克海峽</li>
+                <li>1/19 : 德雷克海峽</li>
+                <li>1/20 : 烏斯懷亞-查爾騰鎮 El Chaltén</li>
+                <li>1/21 : 查爾騰鎮-菲茨羅伊峰 Fitz Roy</li>
+                <li>1/22 : 查爾騰鎮-埃爾卡拉法特El Calafate</li>
+                <li>1/23 : 埃爾卡拉法特-佩里托莫雷諾冰川</li>
+                <li>1/24 : 埃爾卡拉法特-布宜諾斯艾利斯</li>
+                <li>1/25 : 布宜諾斯艾利斯</li>
+                <li>1/26 : 布宜諾斯艾利斯-巴西聖保羅</li>
+                <li>1/27 : 巴西聖保羅-伊斯坦堡</li>
+                <li>1/28 : 伊斯坦堡-桃園</li>
+               <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2025.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+           <a href="路線圖/2025-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a>  
+           <a href="路線圖/2025-3.jpg" class="album-link" onclick="openCenteredWindow(event)">南極半島  &raquo;</a>                 
+            <a href="2025/album/index.html"Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2025/02.jpg" alt="" class="active" />
+                <img src="2025/01.jpg" alt="" />
+                <img src="2025/03.jpg" alt="" />
+                <img src="2025/04.jpg" alt="" />
+                <img src="2025/08.jpg" alt="" />
+                <img src="2025/05.jpg" alt="" />
+                <img src="2025/06.jpg" alt="" />
+                <img src="2025/07.jpg" alt="" />
+                <img src="2025/09.jpg" alt="" />
+                <img src="2025/10.jpg" alt="" />
+                <img src="2025/11.jpg" alt="" />
+                <img src="2025/12.jpg" alt="" />
+                 <img src="2025/13.jpg" alt="" />
+                <img src="2025/14.jpg" alt="" />               
+            </div>
+                  <div class="button-group">
+                <button class="prev-btn" data-year-index="0" data-direction="-1">上一張</button>      
+                <button class="next-btn" data-year-index="0" data-direction="1">下一張</button>
+            </div><!-- 最上面第一個data-year-index=都是0...下面有新增修改01-2-3-4 -->
+        </div>
+    </section>
+    <section class="year-block" id="y2024">
+        <div class="itinerary">
+            <h2>2024 智利 </h2>
+            <ul>
+                <li>1/23 : 桃園-洛杉磯-聖薩爾瓦多</li>
+                <li>1/24 : 聖薩爾瓦多-哥倫比亞波哥大-聖地牙哥</li>
+                <li>1/25 : 聖地牙哥-納塔萊斯港</li>
+                <li>1/26 : 納塔萊斯港-百內國家公園</li>
+                <li>1/27 : 百內國家公園</li>
+                <li>1/28 : 百內國家公園</li>
+                <li>1/29 : 百內國家公園</li>
+                <li>1/30 : 百內國家公園-納塔萊斯港-阿雷納斯</li>
+                <li>1/31 : 阿雷納斯-聖地牙哥 </li>
+                <li>2/01 : 聖地牙哥-復活節島</li>
+                <li>2/02 : 復活節島</li>
+                <li>2/03 : 復活節島</li>
+                <li>2/04 : 復活節島</li>
+                <li>2/05 : 復活節島 -聖地牙哥</li>
+                <li>2/06 : 聖地牙哥-墨西哥城</li>
+                <li>2/07 : 墨西哥城-聖地牙哥</li>
+                <li>2/08 : 聖地牙哥-波哥大-聖薩爾瓦多-洛杉磯</li>
+                <li>2/09: 洛杉磯-舊金山</li>
+                <li>2/10: 舊金山-桃園</li>
+
+                <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2024.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+          <a href="路線圖/2024-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a> 
+            <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2024/01.jpg" alt="" class="active" />
+                <img src="2024/02.jpg" alt="" />
+                <img src="2024/03.jpg" alt="" />
+                <img src="2024/05.jpg" alt="" />
+                <img src="2024/06.jpg" alt="" />
+                <img src="2024/04.jpg" alt="" />
+                <img src="2024/07.jpg" alt="" />
+                <img src="2024/08.jpg" alt="" />
+                <img src="2024/09.jpg" alt="" />
+                <img src="2024/10.jpg" alt="" />                
+                <img src="2024/11.jpg" alt="" />
+                <img src="2024/12.jpg" alt="" />
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="1" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="1" data-direction="1">下一張</button>
+
+            </div>
+        </div>
+    </section>
+
+        <section class="year-block" id="y2023">
+        <div class="itinerary">
+            <h2>2023 葡萄牙、比利時、荷蘭 </h2>
+            <ul>
+                <li>1/09 : 桃園-杜拜</li>
+                <li>1/10 : 杜拜-葡萄牙里斯本</li>
+                <li>1/11 : 里斯本</li>
+                <li>1/12 : 里斯本-辛特拉</li>
+                <li>1/13 : 里斯本</li>
+                <li>1/14 : 里斯本-波多</li>
+                <li>1/15 : 波多</li>
+                <li>1/16 : 波多</li>
+                <li>1/17 : 波多-比利時布魯塞爾 </li>
+                <li>1/18 : 布魯塞爾</li>
+                <li>1/19 : 布魯塞爾-根特</li>
+                <li>1/20 : 根特-布魯日</li>
+                <li>1/21 : 布魯日-荷蘭鹿特丹</li>
+                <li>1/22 : 鹿特丹-阿姆斯特丹</li>
+                <li>1/23 : 阿姆斯特丹</li>
+                <li>1/24 : 阿姆斯特丹</li>
+                <li>1/25 : 阿姆斯特丹-杜拜</li>
+                <li>1/26 : 杜拜-桃園</li>
+
+                <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2023.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1 &raquo;</a>
+          <a href="路線圖/2023-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a> 
+          <a href="路線圖/2023-3.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖3  &raquo;</a>           
+                <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2023/07.jpg" alt="" class="active" />
+                <img src="2023/01.jpg" alt="" />
+                <img src="2023/02.jpg" alt="" />
+                <img src="2023/05.jpg" alt="" />
+                <img src="2023/04.jpg" alt="" />
+                <img src="2023/03.jpg" alt="" />
+                <img src="2023/06.jpg" alt="" />
+                <img src="2023/08.jpg" alt="" />
+                <img src="2023/09.jpg" alt="" />
+                <img src="2023/10.jpg" alt="" />
+
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="2" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="2" data-direction="1">下一張</button>                
+            </div>
+        </div>
+    </section>
+
+          <section class="year-block" id="y2020">
+        <div class="itinerary">
+            <h2>2020 波蘭、波羅的海三小國  </h2>
+            <ul>
+                <li>1/13 : 台中-桃園-香港</li>
+                <li>1/14 : 香港-丹麥哥本哈根-波蘭格但斯克</li>
+                <li>1/15 : 格但斯克-馬爾堡</li>
+                <li>1/16 : 格但斯克-托倫</li>
+                <li>1/17 : 托倫-華沙</li>
+                <li>1/18 : 華沙</li>
+                <li>1/19 : 華沙-克拉科夫</li>
+                <li>1/20 : 克拉科夫-奧斯威辛集中營</li>
+                <li>1/21 : 克拉科夫-鹽礦 </li>
+                <li>1/22 : 克拉科夫-立陶宛-維爾紐斯</li>
+                <li>1/23 : 根維爾紐斯-特拉凱</li>
+                <li>1/24 : 維爾紐斯-拉脫維亞-里加</li>
+                <li>1/25 : 里加</li>
+                <li>1/26 : 里加-愛沙尼亞塔林</li>
+                <li>1/27 : 塔林-芬蘭赫爾辛基塔林</li>
+                <li>1/28 : 塔林</li>
+                <li>1/29 : 塔林-丹麥哥本哈根</li>
+                <li>1/30 : 哥本哈根-香港-桃園</li>
+
+                <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2020.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+          <a href="路線圖/2020-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a> 
+
+            <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2020/02.jpg" alt="" class="active" />
+                <img src="2020/03.jpg" alt="" />
+                <img src="2020/01.jpg" alt="" />
+                <img src="2020/05.jpg" alt="" />
+                <img src="2020/04.jpg" alt="" />
+                <img src="2020/06.jpg" alt="" />
+                <img src="2020/07.jpg" alt="" />
+                <img src="2020/08.jpg" alt="" />    
+                <img src="2020/09.jpg" alt="" />
+                <img src="2020/10.jpg" alt="" />    
+                <img src="2020/11.jpg" alt="" />
+                <img src="2020/12.jpg" alt="" /> 
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="3" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="3" data-direction="1">下一張</button>
+
+            </div>
+        </div>
+    </section>
+  
+             <section class="year-block" id="y2019">
+        <div class="itinerary">
+            <h2>2019 以色列、約旦、巴勒斯坦  </h2>
+            <ul>
+                <li>1/22 : 桃園-香港-伊斯坦堡</li>
+                <li>1/23 : 伊斯坦堡-特拉維夫-耶路撒冷(苦路14站+聖墓教堂)</li>
+                <li>1/24 : 耶路撒冷(聖殿山+西牆隧道+橄欖山+大衛塔)</li>
+                <li>1/25 : 耶路撒冷(大衛之城)</li>
+                <li>1/26 : 耶路撒冷-巴勒斯坦(伯利恆)</li>
+                <li>1/27 : 耶路撒冷-馬薩大</li>
+                <li>1/28 : 耶路撒冷-亞喀巴 -瓦地倫</li>
+                <li>1/29 : 瓦地倫-佩特拉</li>
+                <li>1/30 : 佩特拉 </li>
+                <li>1/31 : 佩特拉-克拉克城堡-死海</li>
+                <li>2/01 : 死海-尼波山-米底巴-傑拉什-安曼</li>
+                <li>2/02 : 安曼</li>
+                <li>2/03 : 安曼-耶路撒冷</li>
+                <li>2/04 : 耶路撒冷-特拉維夫</li>
+                <li>2/05 : 特拉維夫</li>
+                <li>2/06 : 特拉維夫-伊斯坦堡</li>
+                <li>2/07 : 伊斯坦堡-香港-台中</li>
+   
+
+                <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2019.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+          <a href="路線圖/2019-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a>
+            <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2019/03.jpg" alt="" class="active" />
+                <img src="2019/01.jpg" alt="" />
+                <img src="2019/02.jpg" alt="" />
+                <img src="2019/05.jpg" alt="" />
+                <img src="2019/04.jpg" alt="" />
+                <img src="2019/06.jpg" alt="" />
+                <img src="2019/07.jpg" alt="" />
+                <img src="2019/08.jpg" alt="" />  
+                <img src="2019/09.jpg" alt="" />
+                <img src="2019/10.jpg" alt="" />
+                <img src="2019/11.jpg" alt="" />
+                <img src="2019/12.jpg" alt="" /> 
+
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="4" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="4" data-direction="1">下一張</button>
+
+            </div>
+        </div>
+    </section>
+  
+    </section>
+  
+             <section class="year-block" id="y2018">
+        <div class="itinerary">
+            <h2>2018 祕魯、玻利維亞  </h2>
+            <ul>
+                <li>2/13 : 桃園-首爾</li>
+                <li>2/14 : 首爾-墨西哥城-利馬</li>
+                <li>2/15 : 利馬-阿雷基帕</li>
+                <li>2/16 : 阿雷基帕-普諾</li>
+                <li>2/17 : 普諾-科巴卡瓦納-太陽島</li>
+                <li>2/18 : 太陽島-拉巴斯</li>
+                <li>2/19 : 拉巴斯-烏尤尼</li>
+                <li>2/20 : 烏尤尼</li>
+                <li>2/21 : 烏尤尼 </li>
+                <li>2/22 : 烏尤尼-拉巴斯</li>
+                <li>2/23 : 拉巴斯-庫斯科</li>
+                <li>2/24 : 庫斯科</li>
+                <li>2/25 : 庫斯科</li>
+                <li>2/26 : 庫斯科-聖谷-馬丘比丘</li>
+                <li>2/27 : 馬丘比丘-庫斯科</li>
+                <li>2/28 : 庫斯科-利馬</li>
+                <li>3/01 : 利馬</li>
+                <li>3/02 : 利馬-墨西哥城</li>
+                <li>3/03 : 墨西哥城-首爾</li>
+                <li>3/04 : 首爾-桃園</li>
+
+                <!-- 更多行程 -->
+            </ul>
+
+          <a href="路線圖/2018.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+          <a href="路線圖/2018-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a>
+            <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2018/06.jpg" alt="" class="active" />
+                <img src="2018/02.jpg" alt="" />
+                <img src="2018/05.jpg" alt="" />
+                <img src="2018/04.jpg" alt="" />
+                <img src="2018/03.jpg" alt="" />
+                <img src="2018/07.jpg" alt="" />
+                <img src="2018/08.jpg" alt="" />  
+                <img src="2018/09.jpg" alt="" />
+                <img src="2018/10.jpg" alt="" />
+                <img src="2018/11.jpg" alt="" />
+                <img src="2018/12.jpg" alt="" />  
+                <img src="2018/13.jpg" alt="" />
+                <img src="2018/14.jpg" alt="" />  
+
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="5" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="5" data-direction="1">下一張</button>
+
+            </div>
+        </div>
+    </section>
+    <!-- 其他年份區塊... -->
+
+
+             <section class="year-block" id="y2017">
+        <div class="itinerary">
+            <h2>2017 斯洛維尼亞、克羅埃西亞  </h2>
+            <ul>
+                <li>1/19 : 桃園-香港-維也納-威尼斯</li>
+                <li>1/20 : 威尼斯-布雷德湖</li>
+                <li>1/21 : 布雷德湖-盧布里亞納</li>
+                <li>1/22 : 盧布里亞納-羅維尼</li>
+                <li>1/23 : 羅維尼</li>
+                <li>1/24 : 羅維尼-普拉-里耶卡</li>
+                <li>1/25 : 里耶卡-Karlovac-十六湖國家公園</li>
+                <li>1/26 : 十六湖國家公園-斯普利特</li>
+                <li>1/27 : 斯普利特 </li>
+                <li>1/28 : 斯普利特-赫瓦爾</li>
+                <li>1/29 : 斯普利特-莫斯塔爾</li>
+                <li>1/30 : 莫斯塔爾-杜布洛夫尼克</li>
+                <li>1/31 : 杜布洛夫尼克</li>
+                <li>2/01 : 杜布洛夫尼克-KOTOR</li>
+                <li>2/02 : KOTOR-杜布洛夫尼克</li>
+                <li>2/03 : 杜布洛夫尼克-札格雷布-慕尼黑-香港</li>
+                <li>3/04 : 香港-台中</li>
+       
+                <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2017.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+          <a href="路線圖/2017-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a>
+            <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2017/06.jpg" alt="" class="active" />
+                <img src="2017/01.jpg" alt="" />
+                <img src="2017/02.jpg" alt="" />
+                <img src="2017/05.jpg" alt="" />
+                <img src="2017/04.jpg" alt="" />
+                <img src="2017/03.jpg" alt="" />
+                <img src="2017/07.jpg" alt="" />
+                <img src="2017/08.jpg" alt="" />  
+                <img src="2017/09.jpg" alt="" />
+                <img src="2017/10.jpg" alt="" />  
+                <img src="2017/11.jpg" alt="" />
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="6" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="6" data-direction="1">下一張</button>
+
+            </div>
+        </div>
+    </section>
+
+
+             <section class="year-block" id="y2016">
+        <div class="itinerary">
+            <h2>2016 英國、西班牙  </h2>
+            <ul>
+                <li>1/29 : 桃園-香港</li>
+                <li>1/29 : 香港-法蘭克福-威尼斯</li>
+                <li>1/30 : 威尼斯</li>
+                <li>1/31 : 威尼斯-倫敦</li>
+                <li>2/01 : 倫敦</li>
+                <li>2/02 : 溫莎-巨石陣-巴斯</li>
+                <li>2/03 : 劍橋</li>
+                <li>2/04 : 倫敦</li>
+                <li>2/05 : 牛津 </li>
+                <li>2/06 : 倫敦</li>
+                <li>2/07 : 倫敦-巴塞隆納</li>
+                <li>2/08 : 巴塞隆納</li>
+                <li>2/09 : 巴塞隆納</li>
+                <li>2/10 : 巴塞隆納-馬德里-塞哥維亞</li>
+                <li>2/11 : 托雷多</li>
+                <li>2/12 : 馬德里-慕尼黑-香港</li>
+                <li>2/13 : 香港-台中</li>
+       
+                <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2016.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+          <a href="路線圖/2016-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a>
+         <a href="路線圖/2016-3.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖3  &raquo;</a>
+            <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2016/02.jpg" alt="" class="active" />
+                <img src="2016/01.jpg" alt="" />
+                <img src="2016/06.jpg" alt="" />
+                <img src="2016/05.jpg" alt="" />
+                <img src="2016/04.jpg" alt="" />
+                <img src="2016/03.jpg" alt="" />
+                <img src="2016/07.jpg" alt="" />
+                <img src="2016/08.jpg" alt="" />  
+                <img src="2016/09.jpg" alt="" />
+                <img src="2016/10.jpg" alt="" />
+                <img src="2016/11.jpg" alt="" />
+                <img src="2016/12.jpg" alt="" />
+                <img src="2016/13.jpg" alt="" />
+                <img src="2016/14.jpg" alt="" />
+
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="7" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="7" data-direction="1">下一張</button>
+
+            </div>
+        </div>
+    </section>
+
+
+             <section class="year-block" id="y2015">
+        <div class="itinerary">
+            <h2>2015 紐西蘭南島  </h2>
+            <ul>
+                <li>2/12 : 桃園-吉隆坡-墨爾本</li>
+                <li>2/13 : 墨爾本-基督城</li>
+                <li>2/14 : 基督城-葛雷茅斯</li>
+                <li>2/15 : 葛雷茅斯-福斯冰河</li>
+                <li>2/16 : 福斯冰河</li>
+                <li>2/17 : 福斯冰河-瓦納卡</li>
+                <li>2/18 : 瓦納卡</li>
+                <li>2/19 : 瓦納卡-皇后鎮</li>
+                <li>2/20 : 皇后鎮 </li>
+                <li>2/21 : 皇后鎮-蒂阿惱</li>
+                <li>2/22 : 蒂阿惱-米佛峽灣</li>
+                <li>2/23 : 蒂阿惱-旦尼丁</li>
+                <li>2/24 : 旦尼丁-澳瑪魯</li>
+                <li>2/25 : 奧瑪魯-庫克山</li>
+                <li>2/26 : 庫克山-特卡波</li>
+                <li>2/27 : 特卡波-基督城-墨爾本</li>
+                <li>2/28 : 墨爾本-吉隆坡-桃園</li>
+       
+                <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2015.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+          <a href="路線圖/2015-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a>
+
+            <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2015/07.jpg" alt="" class="active" />
+                <img src="2015/01.jpg" alt="" />
+                <img src="2015/06.jpg" alt="" />
+                <img src="2015/05.jpg" alt="" />
+                <img src="2015/04.jpg" alt="" />
+                <img src="2015/03.jpg" alt="" />
+                <img src="2015/02.jpg" alt="" />
+                <img src="2015/08.jpg" alt="" />  
+                <img src="2015/09.jpg" alt="" />
+                <img src="2015/10.jpg" alt="" />
+                <img src="2015/11.jpg" alt="" />
+                <img src="2015/12.jpg" alt="" />
+                <img src="2015/13.jpg" alt="" />
+
+
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="8" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="8" data-direction="1">下一張</button>
+
+            </div>
+        </div>
+    </section>
+
+             <section class="year-block" id="y2014">
+        <div class="itinerary">
+            <h2>2014 奧地利、匈牙利、捷克  </h2>
+            <ul>
+                <li>5/22 : 桃園-曼谷</li>
+                <li>5/23 : 曼谷-維也納-薩爾斯堡</li>
+                <li>5/24 : 薩爾斯堡-德國國王湖</li>
+                <li>5/25 : 薩爾斯堡-哈修塔特</li>
+                <li>5/26 : 哈修塔特</li>
+                <li>5/27 : 哈修塔特-庫倫諾夫</li>
+                <li>5/28 : 庫倫諾夫-布拉格</li>
+                <li>5/29 : 布拉格</li>
+                <li>5/30 : 布拉格 </li>
+                <li>5/31 : 布拉格-布達佩斯</li>
+                <li>6/01 : 布達佩斯</li>
+                <li>6/02 : 布達佩斯</li>
+                <li>6/03 : 布達佩斯-維也納</li>
+                <li>6/04 : 維也納</li>
+                <li>6/05 : 維也納</li>
+                <li>6/06 : 維也納-曼谷</li>
+                <li>6/07 : 曼谷-桃園</li>
+       
+                <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2014.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+          <a href="路線圖/2014-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a>
+
+            <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2014/01.jpg" alt="" class="active" />
+                <img src="2014/07.jpg" alt="" />
+                <img src="2014/06.jpg" alt="" />
+                <img src="2014/05.jpg" alt="" />
+                <img src="2014/04.jpg" alt="" />
+  \             <img src="2014/02.jpg" alt="" />
+                <img src="2014/08.jpg" alt="" />  
+                <img src="2014/09.jpg" alt="" />
+                <img src="2014/10.jpg" alt="" />
+                <img src="2014/11.jpg" alt="" />
+                <img src="2014/12.jpg" alt="" />
+                <img src="2014/13.jpg" alt="" />
+
+
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="9" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="9" data-direction="1">下一張</button>
+
+            </div>
+        </div>
+    </section>
+
+             <section class="year-block" id="y2013">
+        <div class="itinerary">
+            <h2>2013 法國、摩納哥  </h2>
+            <ul>
+                <li>6/07 : 桃園-曼谷-阿布達比-日內瓦</li>
+                <li>6/08 : 日內瓦-尼斯</li>
+                <li>6/09 : 尼斯</li>
+                <li>6/10 : 尼斯-摩納哥</li>
+                <li>6/11 : 尼斯-亞維農</li>
+                <li>6/12 : 亞維農</li>
+                <li>6/13 : 亞維農</li>
+                <li>6/14 : 亞維農-巴黎-聖米歇爾山</li>
+                <li>6/15 : 聖米歇爾山-巴黎 </li>
+                <li>6/16 : 巴黎</li>
+                <li>6/17 : 巴黎</li>
+                <li>6/18 : 巴黎</li>
+                <li>6/19 : 巴黎</li>
+                <li>6/20 : 巴黎-阿布達比-曼谷</li>
+                <li>6/21 : 曼谷-桃園</li>
+
+       
+                <!-- 更多行程 -->
+            </ul>
+          <a href="路線圖/2013.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
+          <a href="路線圖/2013-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a>
+
+            <a href=""Target="_blank" class="album-link" onclick>前往相簿  &raquo;</a>
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                <img src="2013/01.jpg" alt="" class="active" />
+                <img src="2013/07.jpg" alt="" />
+                <img src="2013/06.jpg" alt="" />
+                <img src="2013/05.jpg" alt="" />
+                <img src="2013/04.jpg" alt="" />
+                <img src="2013/03.jpg" alt="" />
+                <img src="2013/02.jpg" alt="" />
+                <img src="2013/08.jpg" alt="" />  
+                <img src="2013/09.jpg" alt="" />
+                <img src="2013/10.jpg" alt="" />
+                <img src="2013/11.jpg" alt="" />
+                <img src="2013/12.jpg" alt="" />
+                <img src="2013/13.jpg" alt="" />
+                <img src="2013/14.jpg" alt="" />
+                <img src="2013/15.jpg" alt="" />
+
+            </div>
+            <div class="button-group">
+                <button class="prev-btn" data-year-index="10" data-direction="-1">上一張</button>
+                <button class="next-btn" data-year-index="10" data-direction="1">下一張</button>
+
+            </div>
+        </div>
+    </section>
+
+
+  <section class="year-block" id="my-travel-map">
+        <div class="itinerary">
+            <h2>我的足跡 </h2>
+           <ul>
+                <li>2026-摩洛哥、西班牙、法國</li>           
+                <li>2025-阿根廷、南極</li>
+                <li>2024-智利</li>
+                <li>2023-葡萄牙、比利時、荷蘭</li>
+                <li>2020-波蘭、波羅的海三小國、芬蘭赫爾辛基</li>
+                <li>2019-以色列、約旦、巴勒斯坦</li>
+                <li>2018-墨西哥城、祕魯、玻利維亞</li>
+                <li>2017-斯洛維尼亞、克羅埃西亞、黑山共和國</li>
+                <li>2016-英國、西班牙</li>
+                <li>2015-澳洲墨爾本、紐西蘭南島</li>
+                <li>2014-奧地利、捷克、匈牙利</li>
+                <li>2013-瑞士日內瓦、法國、摩納哥</li>
+                <li>2012-土耳其、希臘</li>
+                <li>2011-義大利</li>
+                <li>2010-香港、印度</li>         
+                <li>2009-雲南、西藏</li>  
+                <li>2007-柬埔寨</li>  
+                <li>2006-馬來西亞、埃及</li>  
+                <li>2005-泰國</li>  
+                                       <!-- 更多行程 -->
+            </ul>
+
+  <a href="路線圖/all.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖  &raquo;</a>
+          <a href="https://matadornetwork.com/travel-map//"target="_blank" >matadornetwork &raquo;</a>
+          <a href="https://www.travellerspoint.com/"target="_blank" >travellerspoint &raquo;</a>
+                    
+          
+        </div>
+        <div class="photo-container">
+            <div class="gallery">
+                            <a href=""target=”_blank”><img src="路線圖/my-travel-map.jpg" alt="" class="active" /></a>
+            </div>
+
+
+        </div>
+    </section>
+
+
+    <footer>
+        <p>&copy; 2025 旅遊紀錄 | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // 為圖片切換按鈕加上事件監聽
+        document.querySelectorAll('.button-group button').forEach(button => {
+            button.addEventListener('click', function () {
+                const yearIndex = parseInt(this.getAttribute('data-year-index')); // 獲取年份索引
+                const direction = parseInt(this.getAttribute('data-direction')); // 獲取切換方向
+                changeImage(yearIndex, direction);
+            });
+        });
+
+        // 變更圖片顯示的邏輯
+        function changeImage(yearIndex, direction = 1) {
+            const yearBlocks = document.querySelectorAll('.year-block');
+            const gallery = yearBlocks[yearIndex].querySelector('.gallery');
+            const images = gallery.querySelectorAll('img');
+
+            // 找到當前顯示圖片的索引
+            let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+
+            if (currentIndex === -1) {
+                currentIndex = 0; // 默認顯示第一張圖片
+            }
+
+            // 移除當前圖片的 'active' 類別
+            images[currentIndex].classList.remove('active');
+
+            // 計算下一張圖片的索引
+            let nextIndex = (currentIndex + direction + images.length) % images.length;
+
+            // 顯示下一張圖片
+            images[nextIndex].classList.add('active');
+        }
+
+        // 為年份導航加上選中效果
+        document.querySelectorAll('.year-link').forEach(link => {
+            link.addEventListener('click', function () {
+                // 移除其他年份的選中效果
+                document.querySelectorAll('.year-link').forEach(link => link.classList.remove('selected'));
+                // 為當前點擊的年份添加選中效果
+                this.classList.add('selected');
+            });
+        });
+
+
+function openCenteredWindow(event) {
+  event.preventDefault();
+
+  const url = event.currentTarget.getAttribute('href');
+
+  // 如果已經開啟了，就不重複建立
+  if (document.getElementById('img-overlay')) return;
+
+  // 建立背景遮罩
+  const overlay = document.createElement('div');
+  overlay.id = 'img-overlay';
+  overlay.style.position = 'fixed';
+  overlay.style.top = 0;
+  overlay.style.left = 0;
+  overlay.style.width = '100vw';
+  overlay.style.height = '100vh';
+  overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+  overlay.style.zIndex = '9998';
+
+  // 建立圖片容器
+  const imgBox = document.createElement('div');
+  imgBox.style.position = 'fixed';
+  imgBox.style.top = '50%';
+  imgBox.style.left = '50%';
+  imgBox.style.transform = 'translate(-50%, -50%)';
+  imgBox.style.zIndex = '9999';
+  imgBox.style.background = 'white';
+  imgBox.style.padding = '10px';
+  imgBox.style.boxShadow = '0 8px 24px rgba(0,0,0,0.5)';
+  imgBox.style.borderRadius = '8px';
+
+  // 建立圖片
+  const img = document.createElement('img');
+  img.src = url;
+  img.style.maxWidth = '70vw';
+  img.style.maxHeight = '70vh';
+  img.style.borderRadius = '6px';
+
+  imgBox.appendChild(img);
+
+  // 點擊背景遮罩或圖片外框即關閉
+  overlay.addEventListener('click', () => {
+    document.body.removeChild(overlay);
+    document.body.removeChild(imgBox);
+  });
+
+  document.body.appendChild(overlay);
+  document.body.appendChild(imgBox);
+}
+    </script>
+</body>
+
+</html>
