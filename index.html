@@ -1,174 +1,163 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-
 <head>
-    <meta charset="UTF-8" />
-    <title>旅遊紀錄</title>
-    <style>
-        body {
-            font-family: "Noto Sans TC", sans-serif;
-            margin: 0;
-            background-color: #f4f4f4;
-            color: #333;
-            padding-top: 3.55rem;
-            scroll-behavior: smooth;
-               overflow-x: auto; /* 可橫向滾動 */
-        }
+<meta charset="UTF-8" />
+<title>旅遊紀錄</title>
+<style>
+body {
+    font-family: "Noto Sans TC", sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    padding-top: 3.55rem;
+    scroll-behavior: smooth;
+    overflow-x: auto;
+}
 
-        header {
-            background-color: #003366;
-            color: white;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 0.5rem 0;
-        }
+header {
+    background-color: #003366;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 0.5rem 0;
+}
 
-        header .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0 auto;
-            padding: 0 4rem;
-        }
+header .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0 4rem;
+}
 
-        header h1 {
-            margin: 0;
-            font-size: 1.rem;
-            line-height: 3rem;
-            white-space: nowrap;
-           -webkit-text-stroke: 0.2px yellow;
-           text-stroke: 0.2px yellow;
-        }
+header h1 {
+    margin: 0;
+    font-size: 1.rem;
+    line-height: 3rem;
+    white-space: nowrap;
+    -webkit-text-stroke: 0.2px yellow;
+    text-stroke: 0.2px yellow;
+}
 
-        .year-nav {
-            overflow-x: hidden;
-            white-space: nowrap;
-        }
+.year-nav ul {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
 
-        .year-nav ul {
-            display: flex;
-  
-            padding: 0;
-            margin: 0;
-            list-style: none;
-        }
+.year-nav li a {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    background-color: #003366;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    transition: background-color 0.3s;
+    line-height: 1.1rem;
+}
 
-        .year-nav li a {
-            display: inline-block;
-            padding: 0.3rem 0.6rem;
-            background-color: #003366;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 1.1rem;
-            white-space: nowrap;
-            transition: background-color 0.3s;
-            line-height: 1.1rem;
-        }
+.year-nav li a.selected {
+    color: #ffcc00 !important;
+    font-weight: bold !important;
+    font-size: 1.4rem !important;
+}
 
-        .year-nav li a:hover {
-            background-color: #003366;
-        }
+section.year-block {
+    background: white;
+    margin: 1rem auto;
+    padding: 0.6rem 1.5rem;
+    max-width: 94%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    scroll-margin-top: 4.5rem;
+}
 
-        .year-nav li a.selected {
-            color: #ffcc00 !important;
-            font-weight: bold !important;
-            font-size: 1.4rem !important;
-            transition: color 0.3s, font-size 0.3s;
-        }
+.itinerary {
+    width: 30%;
+    flex-shrink: 0;
+}
 
-        section.year-block {
-            background: white;
-            margin: 1rem auto;
-            padding: 0.6rem 1.5rem;
-            max-width: 94%;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            scroll-margin-top: 4.5rem;
-        }
+.itinerary h2 {
+    color: #003366;
+    padding-left: 0.6rem;
+    white-space: nowrap;
+    font-size: 1.7rem;
+    border-bottom: 2px solid #c9c9c9;
+    width: 94%;
+    margin: 10px 10px 0px 10px;
+    text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
 
-        .itinerary {
-            width: 30%;
-            flex-shrink: 0;
-        }
+.itinerary a{
+    gap:2px;
+    padding: 5px 10px;
+}
 
-        .itinerary ul {
-            padding-left: 1.3rem;
-            white-space: nowrap;
-            overflow-x: hidden;
-            list-style-type:none;
-        }
 
-        .itinerary h2 {
-       
-            color: #003366;
-            padding-left: 0.6rem;
-            white-space: nowrap;
-            font-size: 1.7rem;
-            border-bottom: 2px solid #c9c9c9;
-            width: 94%;
-            margin: 10px 10px 0px 10px;
-            text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
-        }
+.album-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: #0055a5;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s;
+    padding-bottom: 5px;
+}
 
-        .itinerary a {
-            padding-left: 1rem;
-            white-space: nowrap;           
-           }
-  
+.album-link:hover {
+    color: #003300;
+    text-decoration: underline;
+}
 
-        .album-link {
-            display: inline-block;
-            margin-top: 0.5rem;
-            color: #0055a5;
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: color 0.3s;
-            padding-bottom: 5px;
-        }
+.photo-container {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-bottom: 1rem;
+    position: relative;
+    justify-content: center;
+}
 
-        .album-link:hover {
-            color: #003300;
-            text-decoration: underline;
-        }
+.photo-container .gallery img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 5px 5px 10px rgba(2, 2, 0, 0.5);
+    display: none;
+}
 
-        .photo-container {
-            width: 70%;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 0.3rem;
-            margin-top: 1rem;
-            margin-left: auto;
-            margin-bottom: 1rem;
-            position: relative;
-             justify-content: center;
-        }
+.photo-container .gallery img.active {
+    display: block;
+}
 
-        .photo-container .gallery {
-            width: 100%;
-        }
+.button-group {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 0.2rem 0.4rem;
+    border-radius: 8px;
+    z-index: 10;
+}
 
-        .photo-container img {
-            width: 100%;
-            border-radius: 8px;
-            box-shadow: 5px 5px 10px rgba(2, 2, 0, 0.5);
-            display: none;
-        }
-
-        .photo-container img.active {
-            display: block;
-        }
-
-.photo-container button {
-    background-color: transparent;  /* 由 .button-group 控制背景 */
+.button-group button {
+    background-color: transparent;
     color: white;
     border: 1px solid white;
     padding: 0.2rem 0.8rem;
@@ -178,39 +167,20 @@
     transition: background-color 0.3s, color 0.3s;
 }
 
-.photo-container button:hover {
+.button-group button:hover {
     background-color: rgba(255, 255, 255, 0.2);
     color: yellow;
     font-weight: 700;
 }
 
-   .button-group {
-    position: absolute;
-    bottom: 6px;     /* 距離底部 10px */
-    left: 50%;        /* 水平中間 */
-    transform: translateX(-50%); /* 向左偏移寬度一半，達到居中 */
-    display: flex;
-    gap: 1rem;
-    background-color: rgba(0, 0, 0, 0.4); /* 半透明黑底 */
-    padding: 0.2rem 0.4rem;
-    border-radius: 8px;
-    z-index: 10;
+footer {
+    text-align: center;
+    padding-bottom: 1rem;
+    font-size: 0.8rem;
+    color: #999;
 }
-
-
-
-
-        footer {
-            text-align: center;
-            padding-bottom: 1rem;
-            font-size: 0.8rem;
-            color: #999;
-
-
-        }
-    </style>
+</style>
 </head>
-
 <body>
     <header>
         <div class="header-content">
@@ -923,7 +893,7 @@
                 <!-- 更多行程 -->
             </ul>
           <a href="路線圖/2011.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖1  &raquo;</a>
-          <a href="路線圖/2011-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a><br>
+          <a href="路線圖/2011-2.jpg" class="album-link" onclick="openCenteredWindow(event)">路線圖2  &raquo;</a>
 
             <a href=""Target="_blank" class="album-link" onclick>前往相簿 x  &raquo;</a>
         </div>
@@ -1002,51 +972,36 @@
     <footer>
         <p>&copy; 2025 旅遊紀錄 | All Rights Reserved</p>
     </footer>
+<script>
+// 圖片切換
+document.querySelectorAll('.button-group button').forEach(button => {
+    button.addEventListener('click', function () {
+        const yearIndex = parseInt(this.getAttribute('data-year-index'));
+        const direction = parseInt(this.getAttribute('data-direction'));
+        changeImage(yearIndex, direction);
+    });
+});
 
-    <script>
-        // 為圖片切換按鈕加上事件監聽
-        document.querySelectorAll('.button-group button').forEach(button => {
-            button.addEventListener('click', function () {
-                const yearIndex = parseInt(this.getAttribute('data-year-index')); // 獲取年份索引
-                const direction = parseInt(this.getAttribute('data-direction')); // 獲取切換方向
-                changeImage(yearIndex, direction);
-            });
-        });
+function changeImage(yearIndex, direction = 1) {
+    const yearBlocks = document.querySelectorAll('.year-block');
+    const gallery = yearBlocks[yearIndex].querySelector('.gallery');
+    const images = gallery.querySelectorAll('img');
+    let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+    if (currentIndex === -1) currentIndex = 0;
+    images[currentIndex].classList.remove('active');
+    let nextIndex = (currentIndex + direction + images.length) % images.length;
+    images[nextIndex].classList.add('active');
+}
 
-        // 變更圖片顯示的邏輯
-        function changeImage(yearIndex, direction = 1) {
-            const yearBlocks = document.querySelectorAll('.year-block');
-            const gallery = yearBlocks[yearIndex].querySelector('.gallery');
-            const images = gallery.querySelectorAll('img');
+// 年份選單
+document.querySelectorAll('.year-link').forEach(link => {
+    link.addEventListener('click', function () {
+        document.querySelectorAll('.year-link').forEach(l => l.classList.remove('selected'));
+        this.classList.add('selected');
+    });
+});
 
-            // 找到當前顯示圖片的索引
-            let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
-
-            if (currentIndex === -1) {
-                currentIndex = 0; // 默認顯示第一張圖片
-            }
-
-            // 移除當前圖片的 'active' 類別
-            images[currentIndex].classList.remove('active');
-
-            // 計算下一張圖片的索引
-            let nextIndex = (currentIndex + direction + images.length) % images.length;
-
-            // 顯示下一張圖片
-            images[nextIndex].classList.add('active');
-        }
-
-        // 為年份導航加上選中效果
-        document.querySelectorAll('.year-link').forEach(link => {
-            link.addEventListener('click', function () {
-                // 移除其他年份的選中效果
-                document.querySelectorAll('.year-link').forEach(link => link.classList.remove('selected'));
-                // 為當前點擊的年份添加選中效果
-                this.classList.add('selected');
-            });
-        });
-
-
+// 彈出圖片 + X 關閉
 function openCenteredWindow(event) {
   event.preventDefault();
 
@@ -1084,10 +1039,31 @@ function openCenteredWindow(event) {
   img.style.maxWidth = '85vw';
   img.style.maxHeight = '85vh';
   img.style.borderRadius = '6px';
-
   imgBox.appendChild(img);
 
-  // 點擊背景遮罩或圖片外框即關閉
+  // 建立右上角 X 關閉按鈕
+  const closeBtn = document.createElement('button');
+  closeBtn.innerHTML = '✖';
+  closeBtn.style.position = 'absolute';
+  closeBtn.style.top = '5px';
+  closeBtn.style.right = '5px';
+  closeBtn.style.backgroundColor = 'rgba(0,0,0,0.5)'; // 半透明黑底
+  closeBtn.style.color = 'white';
+  closeBtn.style.border = 'none';
+  closeBtn.style.padding = '4px 8px';
+  closeBtn.style.cursor = 'pointer';
+  closeBtn.style.borderRadius = '4px';
+  closeBtn.style.fontSize = '1rem';
+  closeBtn.style.zIndex = '10000';
+
+  closeBtn.addEventListener('click', () => {
+    document.body.removeChild(overlay);
+    document.body.removeChild(imgBox);
+  });
+
+  imgBox.appendChild(closeBtn);
+
+  // 點擊背景遮罩也關閉
   overlay.addEventListener('click', () => {
     document.body.removeChild(overlay);
     document.body.removeChild(imgBox);
@@ -1096,7 +1072,6 @@ function openCenteredWindow(event) {
   document.body.appendChild(overlay);
   document.body.appendChild(imgBox);
 }
-    </script>
+</script>
 </body>
-
 </html>
